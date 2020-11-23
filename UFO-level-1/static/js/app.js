@@ -2,6 +2,7 @@
 var tableData = data;
 console.log(tableData);
 
+// Get a referece to the table body
 var tbody = d3.select("tbody");
 
 
@@ -14,12 +15,12 @@ tableData.forEach(function(ufoData) {
 	var row = tbody.append("tr");
 
 	// Use `Object.entries` to console.log each
-	Object.entries(ufoData).forEach(function([key, value]) {
+	Object.entries(ufoData).forEach(([key, value]) => {
     	console.log(key, value);
 
-	// Update each cell's text with UFO sighting values 
-	var cell = row.append("td");
-	cell.text(value);
+		// Update each cell's text with UFO sighting values 
+		var cell = row.append("td");
+		cell.text(value);
 	});
 });
 
@@ -27,35 +28,29 @@ tableData.forEach(function(ufoData) {
 var button = d3.select("#filter_btn");
 var form = d3.select("#filters");
 
-// Create event handlers 
-button.on("click", runFilter);
-form.on("submit", runFilter);
+// Create event handler 
+button.on("click", function () { 
+	// Remove existing table
+	d3.select("tbody").html("");
+	//  Prevent the page from refreshing
+	d3.event.preventDefault();
+	
+	//  Select the input element and get the value property
+	var inputValue = d3.select("#datetime").property("value");
+	console.log(inputValue);
+	// var inputElement = d3.select("#datetime");
+	// // Get the value property of the input element
+	// var inputValue = inputElement.property("value");
+	// console.log(inputValue);
+	// Filter Data with datetime = input value
+	var filteredData = tableData.filter(ufo => ufo.datetime === inputValue);
+	console.log(filteredData);
 
-// Complete the event handler function for the form
-function runFilter() {
+// Loop through filtered data & save row 
+filteredData.forEach((filtered) => {
+	// Append one table row `tr` for each UFO Sighting object
+	var row = tbody.append("tr");
 
-//  Prevent the page from refreshing
-d3.event.preventDefault();
-  
-//  Select the input element and get the raw HTML node
-var inputElement = d3.select("#datetime");
-
-//   // Get the value property of the input element
-var inputValue = inputElement.property("value");
-
-console.log(inputValue);
-console.log(tableData);
-
-var filteredUFO = tableData.filter(ufo => ufo.datetime === inputValue);
-
-console.log(filteredUFO);
-};
-
-filteredUFO.forEach(function(filtered) {
-console.log(filtered);
-
-// Append one table row `tr` for each UFO Sighting object
-var row = tbody.append("tr");
 // Use `Object.entries` to console.log each UFO Sighting value
 Object.entries(filtered).forEach(function([key, value]) {
     console.log(key, value);
@@ -64,38 +59,7 @@ Object.entries(filtered).forEach(function([key, value]) {
     cell.text(value);
 	});
 });
+});
 
-// data.forEach(function(ufoData) {
-//   console.log(ufoData);
-//   var row = tbody.append("tr");
-
-// Use d3 to append one table row `tr` for each UFO sighting
-
-// data.forEach(function(weatherReport) {
-//   console.log(weatherReport);
-//   var row = tbody.append("tr");
-// });
-
-// LEVEL 1
-// * Using the UFO dataset provided in the form of an array of JavaScript objects, 
-// write code that appends a table to your web page and then adds new rows of data 
-// for each UFO sighting.
-
-
-// * Use a date form in your HTML document and write JavaScript code that will listen for events 
-// and search through the `date/time` column to find rows that match user input.
-
-
-
-
-// LEVEL 2
-// * Using multiple `input` tags and/or select dropdowns, write JavaScript code so the user can 
-// to set multiple filters and search for UFO sightings using the following criteria based on the table columns:
-
-//   1. `date/time`
-//   2. `city`
-//   3. `state`
-//   4. `country`
-//   5. `shape`
-
-// YOUR CODE HERE!
+// filteredUFO.forEach(function(filtered) {
+// console.log(filtered);
